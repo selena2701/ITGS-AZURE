@@ -9,7 +9,7 @@ namespace ITGoShop_F_Ver2.Models
 {
     public class ITGoShopLINQContext : DbContext
     {
-        private const string connectionString = "server=itgsdb.mysql.database.azure.com ; port=3306 ; database=itgoshop;user id=itgs;password=c@123456;Convert Zero Datetime=True";
+        private const string connectionString = "server=itgs.mysql.database.azure.com ; port=3306 ; database=itgoshop;user id=itgs;password=c@123456;Convert Zero Datetime=True";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
