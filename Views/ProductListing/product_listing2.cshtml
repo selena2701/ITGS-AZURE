@@ -1,0 +1,156 @@
+﻿@using System.Globalization;
+@{
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@foreach (var item in @ViewBag.Cate)
+{
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bread-inner">
+                        <ul class="bread-list">
+                            <li><a>Trang chủ<i class="ti-arrow-right"></i></a></li>
+                            <li class="active">
+                                <a>
+                                    @item.GetType().GetProperty("CategoryName").GetValue(item, null)
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="ps-products-wrap pr-80 pl-80 pt-80 pb-80">
+    <div class="ps-products" data-mh="product-listing">
+        <div class="ps-product-action">
+            <div class="ps-product__filter">
+                <form>
+
+                    <select name="sort" id="sort" class="form-control" style="font-size:12px;">
+                        <option value="{{Request::url()}}?sort_by=none" style="font-size:12px;">Sắp Xếp Theo</option>
+                        <option value="{{Request::url()}}?sort_by=tangdan" style="font-size:12px;">_Giá Tăng Dần_ </option>
+                        <option value="{{Request::url()}}?sort_by=giamdan" style="font-size:12px;">_Giá Giảm Dần_ </option>
+                        <option value="{{Request::url()}}?sort_by=az" style="font-size:12px;">_A - Z_ </option>
+                        <option value="{{Request::url()}}?sort_by=za" style="font-size:12px;">_Z - A_ </option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="ps-product__columns">
+            @foreach (var item in @ViewBag.OnePageOfProducts)
+            {
+                <div class="ps-product__column" style="width: 250px; height: 350px; margin-right: 15px; ">
+                    <div class="single-product">
+                        <div class="product-img" style="width: 250px; height: 200px;">
+                            <a href="/ProductDetail/product_detail?productId=@item.GetType().GetProperty("ProductId").GetValue(item, null)">
+                                <img class="default-img" style="margin: auto; max-width: 250px; max-height: 200px; width: auto; height: auto; " src="~/public/images_upload/product/@item.GetType().GetProperty("ProductImage").GetValue(item, null)" alt="#">
+                                <img class="hover-img" src="~/public/images_upload/product/@item.GetType().GetProperty("ProductImage").GetValue(item, null)" alt="#">
+                                @{double so_ngay_da_moban = (DateTime.Now - item.GetType().GetProperty("StartsAt").GetValue(item, null)).TotalDays;}
+                                @if (@so_ngay_da_moban < 14)
+                                {
+                                    <span class="new" style="right: 180px;" >New</span>}
+                            </a>
+                            <div class="button-head">
+                                <div class="product-action">
+                                    <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Lượt xem: @item.GetType().GetProperty("View").GetValue(item, null)</span></a>
+                                    <a title="Wishlist" href="javascript:void(0)"><i class=" ti-heart "></i><span>Yêu thích</span></a>
+                                    <input type="text" class="ProductId" value="@item.GetType().GetProperty("ProductId").GetValue(item, null)" hidden>
+                                </div>
+                                <div class="product-action-2">
+                                    <a title="Add to cart" class="add-to-cart-a-tag" href="javascript:void(0)">Thêm vào giỏ hàng</a>
+                                    <input type="text" value="@item.GetType().GetProperty("ProductId").GetValue(item, null)" hidden>
+                                    <input type="hidden" class="Quantity" value="@item.GetType().GetProperty("Quantity").GetValue(item, null)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <h3><a style="text-decoration:none" href="/ProductDetail/product_detail?productId=@item.GetType().GetProperty("ProductId").GetValue(item, null)">@item.GetType().GetProperty("ProductName").GetValue(item, null)</a></h3>
+                            <div class="product-price">
+                                <span style="color:black; font-size:17px"><b>@item.GetType().GetProperty("Price").GetValue(item, null).ToString("#,###", cul.NumberFormat) ₫</b></span>
+                                @if (@item.GetType().GetProperty("Discount").GetValue(item, null) > 0)
+                                {
+                                    double dc = @item.GetType().GetProperty("Price").GetValue(item, null) + (@item.GetType().GetProperty("Price").GetValue(item, null) * (@item.GetType().GetProperty("Discount").GetValue(item, null)) / 100);
+                                    <br>
+                                    <span class="old">@dc.ToString("#,###", cul.NumberFormat) ₫</span>
+                                    <span class="o-giam-gia" style="font-size:10px">-@item.GetType().GetProperty("Discount").GetValue(item, null)% </span>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div class="ps-sidebar" data-mh="product-listing">
+        <aside class="ps-widget--sidebar ps-widget--category">
+            <div class="ps-widget__header">
+                <h2 style="font-weight: bold;">Thương hiệu nhánh</h2>
+            </div>
+            <!--{
+         $sbrand_id = [];
+         $sbrand_arr = [];
+             if (isset($_GET['subbrand'])) {
+           $sbrand_id = $_GET['subbrand'];
+             } else {
+           $sbrand_id = $SubBrandId.",";
+             }
+         $sbrand_arr = explode(",", $sbrand_id);
+         }-->
+            <div class="ps-widget__content">
+                <ul class="ps-list--checked">
+                    @foreach (var item in @ViewBag.SubBrand)
+                    {
+                        <li>
+                            <label class="checkbox-inline" style="font-size: 14px;  ">
+                                <input type="checkbox" class="form-control-checkbox subbrand-filter" data-filters="subbrand" value="@item.GetType().GetProperty("BrandId").GetValue(item, null)" name="subbrand-filter" style="width: 20px; height: 20px; padding-right: 30px;">
+                                <span style="padding-left: 20px;  display: block;  position: relative; color: #313131;">@item.GetType().GetProperty("BrandName").GetValue(item, null)</span>
+                            </label>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </aside>
+        <aside class="ps-widget--sidebar ">
+            <div class="ps-widget__header">
+                <h2 for="amount">Khoảng Giá</h2>
+            </div>
+            <form>
+
+                <div id="slider-range"></div>
+                <input type="text" id="sotien" readonly style="border:0; color:#77ACF1; font-weight:bold; left:0; padding-top:10px; ">
+                <input type="hidden" name="start_price" id="start_price">
+                <input type="hidden" name="end_price" id="end_price">
+                <div style="padding-top:10px; ">
+                    <input type="submit" name="filter_price" value="Lọc" class="btn btn-sm btn-default">
+                </div>
+            </form>
+
+        </aside>
+    </div>
+</div>
+<script type="text/javascript">
+		$(document).ready(function(){
+			$( "#slider-range" ).slider({
+			range: true,
+            min: @ViewBag.min_price_range,
+            max: @ViewBag.max_price_range,
+			step: 100000,
+            values: [ @ViewBag.min_price , @ViewBag.max_price ],
+			slide: function( event, ui ) {
+				$( "#sotien" ).val( ui.values[ 0 ] + " đ - " + ui.values[ 1 ] + " đ");
+				$( "#start_price" ).val( ui.values[ 0 ] );
+				$( "#end_price" ).val( ui.values[ 1 ] );
+			}
+			});
+			$( "#sotien" ).val( $( "#slider-range" ).slider( "values", 0 ) +
+			" đ - " + $( "#slider-range" ).slider( "values", 1 ) + " đ");
+		});
+
+</script>
