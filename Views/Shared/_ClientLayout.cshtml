@@ -1,9 +1,7 @@
 ﻿@using System.Globalization;
 @using Microsoft.AspNetCore.Http
-@using System.Security.Principal
-
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-@{
+@{ 
     string adminId = HttpContextAccessor.HttpContext.Session.GetString("adminId");
     string customerId = HttpContextAccessor.HttpContext.Session.GetString("customerId");
     string customerFirstName = HttpContextAccessor.HttpContext.Session.GetString("customerFirstName");
@@ -173,34 +171,18 @@
                     @if (!string.IsNullOrEmpty(customerId))
                     {<a class="ps-cart__toggle" href="/Wishlist/Index"><i class="fa fa-heart-o" aria-hidden="true" title="Wish List"></i></a>}
                     <div class="dropdown">
-                        <div class="nut_dropdown">
-                            <a class="ps-cart__toggle" method="get" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn"><i class="fa fa-user-circle-o" title="Đăng Nhập"></i></a>
-                            @*<form method="get" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">
-                    <button type="submit" class="ps-cart__toggle"><i class="fa fa-user-circle-o" title="Đăng Nhập"></i></button>
-                </form>*@
-                        </div>
+                        <div class="nut_dropdown"><a href="/Home/login" class="ps-cart__toggle"><i class="fa fa-user-circle-o" title="Đăng Nhập"></i></a></div>
                         <div class="noidung_dropdown">
-                            @*@if (!string.IsNullOrEmpty(customerId))*@
-                            @if (User.Identity.IsAuthenticated)
+                            @if (!string.IsNullOrEmpty(customerId))
                             {
-                                @*<a>Xin chào, @User.Identity.Name !</a>*@
-                                <a method="get" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">Tài khoản</a>
+                                <a href="/Profile/profile">Tài khoản</a>
                                 <a href="/Order/my_orders">Đơn hàng của tôi</a>
                                 <a href="/customer">Kiểm tra bảo hành</a>
-                                <a method="get" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Đăng xuất</a>
-                                @*<form method="get" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">
-                        <button type="submit" class="btn-link" style="margin-right:5px">Edit Profile</button>
-                    </form>
-                    <form method="get" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">
-                        <button type="submit" class="btn-link">Đăng xuất</button>
-                    </form>*@
+                                <a href="/Home/Logout">Đăng xuất</a>
                             }
                         </div>
                     </div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a class="xinchao">Xin chào, @User.Identity.Name !</a>
-                    }
+
                 </div>
             </div>
         </nav>
@@ -286,7 +268,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <div class="left">
-                                <p>Copyright © 2023  -  All Rights Reserved.</p>
+                                <p>Copyright © 2020  -  All Rights Reserved.</p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-12">
@@ -300,17 +282,6 @@
         </div>
     </footer>
     <style>
-        .xinchao {
-            position: relative;
-            z-index: 10;
-            display: inline-block;
-            font-family: "Archivo Narrow", sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 80px;
-            color: #fff !important;
-            margin: 8px 0px 8px 0px ;
-        }
         .swal-footer, .swal-text {
             text-align: center;
         }
